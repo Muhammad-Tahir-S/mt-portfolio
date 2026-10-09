@@ -1,0 +1,43 @@
+---
+description: Write in ASD-STE100 sentences, and teach each new concept before you use it
+alwaysApply: true
+---
+
+# Teach, then act
+
+The reader has about five years in React, TypeScript, CSS, and the browser. They have not shipped GSAP, Three.js, or GLSL. A short definition is not enough. They may already guess the definition. Give the context that lets them act.
+
+## Writing rules (ASD-STE100)
+
+Follow the writing rules of ASD-STE100. You do not have the official word dictionary in this repo. Follow the sentence rules. Keep a technical name when the industry uses that name, and explain it the first time.
+
+- Put one idea in each sentence.
+- A description has 25 words or fewer.
+- A procedure step has 20 words or fewer. Start the step with a verb.
+- Use the active voice. Say who does the action.
+- Use "a", "an", and "the". Do not omit the verb.
+- Do not use contractions. Write "do not" and "it is".
+- Do not put more than three nouns in a row.
+- Use one word for one thing. Do not swap in a synonym.
+- Use a vertical list when you have three or more parallel items.
+
+## Teaching rules
+
+When a tool, file type, or graphics idea is new, use this order:
+
+1. Name it.
+2. Say which problem it solves.
+3. Connect that problem to something they already do in React, CSS, or the browser.
+4. Then give the fact for this portfolio.
+
+Explain first. Then do the task they asked for. Do not skip the explanation and start the new work. Do not stop after the explanation if they asked you to build.
+
+```text
+Weak: "Highway is a PJAX router."
+
+Use this shape:
+In your React work, the router changes the URL and swaps the page component. The layout can stay mounted.
+On this site, Highway fetches the next HTML page. It replaces one node. The WebGL canvas stays on the page.
+```
+
+Read `docs/craft-reference.md` before you change layout, motion, routing, or WebGL.

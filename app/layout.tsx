@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Schibsted_Grotesk } from "next/font/google";
 import { SiteNav } from "@/components/dom/site-nav";
+import { ScrollRoot } from "@/components/motion/scroll-root";
 import clsx from "clsx";
 
 const floral = Cormorant_Garamond({
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={clsx(floral.variable, grotesque.variable, voice.variable)}>
       <body>
+        <ScrollRoot />
         <SiteNav />
         {children}
       </body>

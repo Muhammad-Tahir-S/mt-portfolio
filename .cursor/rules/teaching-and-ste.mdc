@@ -7,6 +7,23 @@ alwaysApply: true
 
 The reader has about five years in React, TypeScript, CSS, and the browser. They have not shipped GSAP, Three.js, or GLSL. A short definition is not enough. They may already guess the definition. Give the context that lets them act.
 
+## Lesson opening
+
+Start every module and every sub-module with a short opening. Do this before the explanation and before the steps.
+
+- State the aim of this lesson.
+- State how that aim serves the site: one space, a real document, and care before effects.
+- Keep the opening to a few sentences.
+- Then teach. Then give the steps.
+
+```text
+Weak: start at clamp() and the font files.
+
+Use this shape:
+Aim. The study page needs a type system that holds with no photographs.
+This serves the site because the HTML document must work with WebGL off. The case study is that document.
+```
+
 ## Writing rules (ASD-STE100)
 
 Follow the writing rules of ASD-STE100. You do not have the official word dictionary in this repo. Follow the sentence rules. Keep a technical name when the industry uses that name, and explain it the first time.

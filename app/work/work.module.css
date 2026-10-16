@@ -1,0 +1,24 @@
+.page {
+  margin: 0;
+  padding: 1rem 1.25rem 3rem;
+  color: #1a1a1a;
+  background: #fff;
+  font-family: var(--font-grotesque), system-ui, sans-serif;
+}
+
+.heading {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  color: inherit;
+}

@@ -1,0 +1,78 @@
+.page {
+  margin: 0;
+  padding: 2rem 1.25rem 4rem;
+  color: #1a1a1a;
+  background: #fff;
+  font-family: var(--font-grotesque), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+.article {
+  display: grid;
+  gap: 1.5rem;
+  justify-items: start;
+}
+
+.label {
+  margin: 0;
+  font-family: var(--font-grotesque), system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.display {
+  margin: 0;
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+  font-family: var(--font-voice), "Iowan Old Style", Palatino, serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: clamp(2.75rem, 1.2rem + 5vw, 6.25rem);
+  line-height: 0.9;
+}
+
+.voice {
+  margin: 0;
+  font-family: var(--font-voice), "Iowan Old Style", Palatino, serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.75rem;
+  line-height: 1.3;
+}
+
+.body {
+  margin: 0;
+  max-width: 65ch;
+}
+
+.services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.figure {
+  width: 100%;
+  margin: 0;
+}
+
+.frame {
+  aspect-ratio: 16 / 9;
+  border: 1px solid currentColor;
+}
+
+.caption {
+  margin: 0.75rem 0 0;
+  max-width: 65ch;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}

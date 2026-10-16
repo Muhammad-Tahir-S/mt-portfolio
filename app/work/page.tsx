@@ -10,7 +10,9 @@ export const metadata: Metadata = {
 export default function WorkPage() {
   return (
     <main className={styles.page}>
-      <h1 className={styles.heading}>Projects</h1>
+      <h1 className={styles.heading} tabIndex={-1}>
+        Projects
+      </h1>
       <ProjectList projects={projects} />
     </main>
   );

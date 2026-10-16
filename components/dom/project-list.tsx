@@ -1,10 +1,10 @@
 "use client";
 
 import { useRef } from "react";
-import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { TransitionLink } from "@/components/motion/transition-link";
 import type { ProjectSummary } from "@/content/projects";
 import styles from "./project-list.module.css";
 
@@ -54,12 +54,16 @@ export function ProjectList({ projects }: ProjectListProps) {
   return (
     <ul ref={listRef} className={styles.list}>
       {projects.map((project) => (
-        <li key={project.title} className={styles.row} data-project-row>
+        <li key={project.slug ?? project.title} className={styles.row} data-project-row>
           <h2 className={styles.title}>
-            {project.href ? (
-              <Link className={styles.link} href={project.href}>
+            {project.slug ? (
+              <TransitionLink
+                className={styles.link}
+                href={`/work/${project.slug}`}
+                nameTitle
+              >
                 {project.title}
-              </Link>
+              </TransitionLink>
             ) : (
               project.title
             )}

@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Schibsted_Grotesk } from "next/font/google";
 import { SiteNav } from "@/components/dom/site-nav";
+import { RouteTransition } from "@/components/motion/route-transition";
 import { ScrollRoot } from "@/components/motion/scroll-root";
+import { themeBootScript } from "@/content/projects";
 import clsx from "clsx";
 import styles from "./layout.module.css";
+import "./transition.css";
 
 const floral = Cormorant_Garamond({
   subsets: ["latin"],
@@ -36,10 +39,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={clsx(floral.variable, grotesque.variable, voice.variable)}
+      suppressHydrationWarning
     >
-      <body className={styles.body}>
+      <body className={styles.body} suppressHydrationWarning>
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript() }} />
         <ScrollRoot />
-        
+        <RouteTransition />
         <div className={styles.nav}>
           <SiteNav />
         </div>

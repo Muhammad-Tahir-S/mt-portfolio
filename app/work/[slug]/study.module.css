@@ -1,8 +1,8 @@
 .page {
   margin: 0;
   padding: 2rem 1.25rem 4rem;
-  color: #1a1a1a;
-  background: #fff;
+  color: inherit;
+  background: transparent;
   font-family: var(--font-grotesque), system-ui, sans-serif;
   font-weight: 400;
   font-size: 1.125rem;
@@ -75,4 +75,15 @@
   max-width: 65ch;
   font-size: 0.875rem;
   line-height: 1.4;
+}
+
+.next {
+  color: inherit;
+  font-family: var(--font-grotesque), system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
 }

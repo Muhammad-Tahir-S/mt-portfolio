@@ -1,8 +1,8 @@
 .page {
   margin: 0;
   padding: 1rem 1.25rem 40vh;
-  color: #1a1a1a;
-  background: #fff;
+  color: inherit;
+  background: transparent;
   font-family: var(--font-grotesque), system-ui, sans-serif;
 }
 

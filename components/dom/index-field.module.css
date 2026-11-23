@@ -42,12 +42,10 @@
   width: min(100%, 42rem);
   aspect-ratio: 16 / 9;
   border: 1px solid currentColor;
-  /* The plane paints the fill. The box only holds size and a quiet edge. */
-  background: transparent;
-  transition: opacity 0.45s ease;
+  background: var(--frame-fill, transparent);
 }
 
 :global(html.has-index-gl) .frame {
-  /* The plane paints the fill. The border stays so a pale theme still reads. */
+  /* The shader paints the fill. The border stays so a pale theme still reads. */
   background: transparent;
 }

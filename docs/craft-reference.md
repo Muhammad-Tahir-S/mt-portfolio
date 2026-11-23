@@ -718,7 +718,7 @@ Close each module with two checks:
 
 Start the next module by deleting the previous readout. Delete the component, the style, and the store. Do not keep two readouts.
 
-The current readout is Module 6. It is `components/dev/module-6-check.tsx`. Delete it when Module 7 starts.
+The current readout is Module 7. It is `components/dev/module-7-check.tsx`. Delete it when Module 8 starts.
 
 The time budget is 5 to 10 hours each week. Modules 0 to 11 take about 14 to 18 weeks. Modules 12 to 14 are the stretch that makes the work studio-grade.
 

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { TransitionLink } from "@/components/motion/transition-link";
 import type { ProjectSummary } from "@/content/projects";
 import styles from "./index-field.module.css";
@@ -33,7 +34,9 @@ export function IndexField({ projects }: IndexFieldProps) {
             <div
               className={styles.frame}
               data-gl-plane={project.slug}
-              style={{ background: project.theme.background }}
+              style={
+                { "--frame-fill": project.theme.background } as CSSProperties
+              }
               aria-hidden="true"
             />
           </li>

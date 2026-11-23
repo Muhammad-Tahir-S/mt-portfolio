@@ -1,5 +1,9 @@
 # Module 6
 
+The Module 6 readout was removed at the start of Module 7. The camera path remains in `lib/camera-path.ts`.
+
+
+
 Aim. Scroll moves the camera along a path you can predict.
 This serves the site because the index stays one document. The path is a state of that space. The HTML links stay the hit targets.
 

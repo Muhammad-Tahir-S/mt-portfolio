@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import styles from "./webgl-root.module.css";
 import { IndexPlanes } from "./index-planes";
+import { Module7Frame } from "./module-7-frame";
 import { PageCamera } from "./page-camera";
 import { Ticker } from "./ticker";
 
@@ -26,7 +27,6 @@ export function WebGLRoot() {
   return (
     <div className={styles.root} aria-hidden="true">
       <Canvas
-        className={styles.canvas}
         frameloop="never"
         dpr={[1, 2]}
         gl={{
@@ -42,6 +42,7 @@ export function WebGLRoot() {
           fov: 50,
         }}
       >
+        <Module7Frame />
         <PageCamera />
         <Ticker />
         <IndexPlanes />

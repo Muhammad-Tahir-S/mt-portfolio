@@ -12,7 +12,6 @@ import {
 } from "@/lib/camera-path";
 import { fieldOfViewForHeight } from "@/lib/camera";
 import { normalizePath } from "@/content/projects";
-import { writeModule6Sample } from "@/lib/module-6-readout";
 import { readScroll } from "@/lib/scroll";
 
 function scrollProgress() {
@@ -121,23 +120,6 @@ export function PageCamera() {
     camera.position.set(next.x, next.y, next.z);
     camera.lookAt(next.lookX, next.lookY, 0);
     camera.updateMatrixWorld();
-
-    const mode = reduce || !onIndex ? "snap" : "damp";
-    const route = !onIndex ? "off-index" : reduce ? "reduced" : "index";
-
-    writeModule6Sample({
-      ready: true,
-      target,
-      progress: progressRef.current,
-      x: next.x,
-      y: next.y,
-      z: next.z,
-      lookX: next.lookX,
-      lookY: next.lookY,
-      fov: camera.fov,
-      mode,
-      route,
-    });
   }, -1);
 
   return null;

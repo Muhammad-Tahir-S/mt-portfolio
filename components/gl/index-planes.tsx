@@ -25,21 +25,11 @@ export function IndexPlanes() {
 
   useLayoutEffect(() => {
     const onIndex = normalizePath(pathname) === "/";
-    const reduce = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
 
     if (!onIndex) {
       document.documentElement.classList.remove(GL_FIELD_CLASS);
       setTargets([]);
       return;
-    }
-
-    // Fade the DOM frames once the field planes are active.
-    if (!reduce) {
-      document.documentElement.classList.add(GL_FIELD_CLASS);
-    } else {
-      document.documentElement.classList.remove(GL_FIELD_CLASS);
     }
 
     const sameTargets = (current: PlaneTarget[], next: PlaneTarget[]) => {
@@ -60,6 +50,16 @@ export function IndexPlanes() {
     };
 
     const read = () => {
+      const reduce = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      if (reduce) {
+        document.documentElement.classList.remove(GL_FIELD_CLASS);
+      } else {
+        document.documentElement.classList.add(GL_FIELD_CLASS);
+      }
+
       const next: PlaneTarget[] = [];
       let index = 0;
 
@@ -88,7 +88,10 @@ export function IndexPlanes() {
       setTargets((current) => (sameTargets(current, next) ? current : next));
     };
 
+    const reduceQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
     read();
+    reduceQuery.addEventListener("change", read);
 
     const field = document.querySelector("[data-index-field]");
     const observer = new MutationObserver(read);
@@ -98,6 +101,7 @@ export function IndexPlanes() {
     }
 
     return () => {
+      reduceQuery.removeEventListener("change", read);
       observer.disconnect();
       document.documentElement.classList.remove(GL_FIELD_CLASS);
     };
@@ -108,6 +112,7 @@ export function IndexPlanes() {
       {targets.map((target) => (
         <BoundPlane
           key={target.slug}
+          slug={target.slug}
           element={target.element}
           color={target.color}
           depth={target.depth}

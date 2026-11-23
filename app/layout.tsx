@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Schibsted_Grotesk } from "next/font/google";
-import { Module6Check } from "@/components/dev/module-6-check";
+import { Module7Check } from "@/components/dev/module-7-check";
 import { SiteNav } from "@/components/dom/site-nav";
 import { WebGLRoot } from "@/components/gl/webgl-root";
 import { RouteTransition } from "@/components/motion/route-transition";
@@ -50,7 +50,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <WebGLRoot />
         <SiteNav />
         <div className={styles.content}>{children}</div>
-        <Module6Check />
+        <Module7Check />
       </body>
     </html>
   );

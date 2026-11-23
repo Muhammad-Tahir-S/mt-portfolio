@@ -10,7 +10,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { themeForPath } from "@/content/projects";
 import styles from "./site-nav.module.css";
 
 gsap.registerPlugin(useGSAP);
@@ -62,6 +61,52 @@ function usePressSync(timelineRef: RefObject<gsap.core.Timeline | null>) {
   }
 
   return { pressed, sync };
+}
+
+function armFocus(
+  root: HTMLAnchorElement | null,
+  pressed: RefObject<Pressed>,
+  sync: () => void,
+) {
+  window.requestAnimationFrame(() => {
+    if (!root?.isConnected || !root.matches(":focus-visible")) {
+      return;
+    }
+
+    pressed.current.focus = true;
+    sync();
+  });
+}
+
+function armTouch(
+  event: PointerEvent<HTMLAnchorElement>,
+  pressed: RefObject<Pressed>,
+  sync: () => void,
+) {
+  if (event.pointerType !== "touch") {
+    return;
+  }
+
+  event.currentTarget.setPointerCapture(event.pointerId);
+  pressed.current.touch = true;
+  sync();
+}
+
+function releaseTouch(
+  event: PointerEvent<HTMLAnchorElement>,
+  pressed: RefObject<Pressed>,
+  sync: () => void,
+) {
+  if (event.pointerType !== "touch") {
+    return;
+  }
+
+  if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+    event.currentTarget.releasePointerCapture(event.pointerId);
+  }
+
+  pressed.current.touch = false;
+  sync();
 }
 
 type NavLinkProps = {
@@ -157,12 +202,7 @@ function NavLink({ href, label }: NavLinkProps) {
   }
 
   function onFocus() {
-    if (!rootRef.current?.matches(":focus-visible")) {
-      return;
-    }
-
-    pressed.current.focus = true;
-    sync();
+    armFocus(rootRef.current, pressed, sync);
   }
 
   function onBlur() {
@@ -171,21 +211,11 @@ function NavLink({ href, label }: NavLinkProps) {
   }
 
   function onPointerDown(event: PointerEvent<HTMLAnchorElement>) {
-    if (event.pointerType !== "touch") {
-      return;
-    }
-
-    pressed.current.touch = true;
-    sync();
+    armTouch(event, pressed, sync);
   }
 
   function onPointerUp(event: PointerEvent<HTMLAnchorElement>) {
-    if (event.pointerType !== "touch") {
-      return;
-    }
-
-    pressed.current.touch = false;
-    sync();
+    releaseTouch(event, pressed, sync);
   }
 
   return (
@@ -330,23 +360,45 @@ function ContactLink() {
   );
 
   useLayoutEffect(() => {
-    const on =
+    const label = rootRef.current?.querySelector("[data-label]");
+
+    if (!label) {
+      return;
+    }
+
+    const isOn = () =>
       pressed.current.pointer ||
       pressed.current.focus ||
       pressed.current.touch;
 
-    // Keep the fill where it is, like Index and Projects.
-    // Only refresh the label paper colour when the control is still on.
-    if (!on) {
+    if (!isOn()) {
       clearLabelColor();
       return;
     }
 
-    const label = rootRef.current?.querySelector("[data-label]");
+    // Follow the live paper colour while the theme tween runs.
+    // The fill already uses currentColor, so it follows the ink.
+    const followPaper = () => {
+      if (!isOn()) {
+        clearLabelColor();
+        gsap.ticker.remove(followPaper);
+        return;
+      }
 
-    if (label) {
-      gsap.set(label, { color: themeForPath(pathname).background });
-    }
+      gsap.set(label, {
+        color: getComputedStyle(document.body).backgroundColor,
+      });
+    };
+
+    gsap.ticker.add(followPaper);
+    const timer = window.setTimeout(() => {
+      gsap.ticker.remove(followPaper);
+    }, 800);
+
+    return () => {
+      gsap.ticker.remove(followPaper);
+      window.clearTimeout(timer);
+    };
   }, [pathname]);
 
   function onPointerEnter(event: PointerEvent<HTMLAnchorElement>) {
@@ -368,12 +420,7 @@ function ContactLink() {
   }
 
   function onFocus() {
-    if (!rootRef.current?.matches(":focus-visible")) {
-      return;
-    }
-
-    pressed.current.focus = true;
-    sync();
+    armFocus(rootRef.current, pressed, sync);
   }
 
   function onBlur() {
@@ -382,21 +429,11 @@ function ContactLink() {
   }
 
   function onPointerDown(event: PointerEvent<HTMLAnchorElement>) {
-    if (event.pointerType !== "touch") {
-      return;
-    }
-
-    pressed.current.touch = true;
-    sync();
+    armTouch(event, pressed, sync);
   }
 
   function onPointerUp(event: PointerEvent<HTMLAnchorElement>) {
-    if (event.pointerType !== "touch") {
-      return;
-    }
-
-    pressed.current.touch = false;
-    sync();
+    releaseTouch(event, pressed, sync);
   }
 
   return (

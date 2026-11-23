@@ -22,7 +22,12 @@ export function ScrollRoot() {
 
     if (reduceMotion) {
       const writeNativeScroll = () => {
-        writeScroll({ position: window.scrollY, velocity: 0 });
+        const limit = Math.max(
+          document.documentElement.scrollHeight -
+            document.documentElement.clientHeight,
+          0,
+        );
+        writeScroll({ position: window.scrollY, velocity: 0, limit });
       };
       const unbind = bindScrollMove((position) => {
         window.scrollTo(0, position);
@@ -49,13 +54,18 @@ export function ScrollRoot() {
       writeScroll({
         position: instance.scroll,
         velocity: instance.velocity,
+        limit: instance.limit,
       });
       ScrollTrigger.update();
     };
 
     lenis.on("scroll", onLenisScroll);
     lenis.scrollTo(window.scrollY, { immediate: true });
-    writeScroll({ position: lenis.scroll, velocity: lenis.velocity });
+    writeScroll({
+      position: lenis.scroll,
+      velocity: lenis.velocity,
+      limit: lenis.limit,
+    });
 
     const onTick = (time: number) => {
       if (scrollIsPaused()) {

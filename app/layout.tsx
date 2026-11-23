@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Schibsted_Grotesk } from "next/font/google";
 import { SiteNav } from "@/components/dom/site-nav";
+import { WebGLRoot } from "@/components/gl/webgl-root";
 import { RouteTransition } from "@/components/motion/route-transition";
 import { ScrollRoot } from "@/components/motion/scroll-root";
 import { themeBootScript } from "@/content/projects";
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: themeBootScript() }} />
         <ScrollRoot />
         <RouteTransition />
+        <WebGLRoot />
         <SiteNav />
         <div className={styles.content}>{children}</div>
       </body>

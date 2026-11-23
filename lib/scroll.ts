@@ -1,9 +1,10 @@
 export type ScrollSnapshot = {
   position: number;
   velocity: number;
+  limit: number;
 };
 
-let snapshot: ScrollSnapshot = { position: 0, velocity: 0 };
+let snapshot: ScrollSnapshot = { position: 0, velocity: 0, limit: 0 };
 let paused = false;
 let mover: ((position: number) => void) | null = null;
 let adopter: (() => void) | null = null;

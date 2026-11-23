@@ -1,0 +1,53 @@
+.list {
+  display: grid;
+  gap: 3rem;
+  margin: 3rem 0 0;
+  padding: 0 0 40vh;
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.75rem, 1rem + 2vw, 3rem);
+  font-weight: 300;
+  line-height: 1;
+  font-family: var(--font-voice), "Iowan Old Style", Palatino, serif;
+}
+
+.link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.link:hover,
+.link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.summary {
+  margin: 0;
+  max-width: 42ch;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.frame {
+  width: min(100%, 42rem);
+  aspect-ratio: 16 / 9;
+  border: 1px solid currentColor;
+  /* The plane paints the fill. The box only holds size and a quiet edge. */
+  background: transparent;
+  transition: opacity 0.45s ease;
+}
+
+:global(html.has-index-gl) .frame {
+  /* The plane paints the fill. The border stays so a pale theme still reads. */
+  background: transparent;
+}

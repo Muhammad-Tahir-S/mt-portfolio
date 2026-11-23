@@ -50,7 +50,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  isolation: isolate;
   overflow: hidden;
   padding: 0.55rem 1rem;
   border: 1px solid currentColor;
@@ -71,7 +70,6 @@
 .contactLabel {
   position: relative;
   z-index: 1;
-  color: #fff;
-  mix-blend-mode: difference;
+  color: inherit;
   line-height: 1.2;
 }

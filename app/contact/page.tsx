@@ -17,6 +17,12 @@ export default function ContactPage() {
         Write when you want to talk about a product interface, a case study, or
         this site.
       </p>
+      <a
+        className={styles.mail}
+        href="mailto:muhammadtahirsanuth@gmail.com"
+      >
+        muhammadtahirsanuth@gmail.com
+      </a>
     </main>
   );
 }

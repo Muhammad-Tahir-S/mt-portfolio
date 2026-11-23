@@ -210,7 +210,56 @@ function NavLink({ href, label }: NavLinkProps) {
 function ContactLink() {
   const rootRef = useRef<HTMLAnchorElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
-  const { pressed, sync } = usePressSync(timelineRef);
+  const pressed = useRef<Pressed>({
+    pointer: false,
+    focus: false,
+    touch: false,
+  });
+
+  function clearLabelColor() {
+    const label = rootRef.current?.querySelector("[data-label]");
+
+    if (label) {
+      // Drop the inline colour so the label can inherit the live theme ink.
+      gsap.set(label, { clearProps: "color" });
+    }
+  }
+
+  function sync() {
+    const timeline = timelineRef.current;
+
+    if (!timeline) {
+      return;
+    }
+
+    const on =
+      pressed.current.pointer ||
+      pressed.current.focus ||
+      pressed.current.touch;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (reduce) {
+      timeline.invalidate();
+      timeline.progress(on ? 1 : 0);
+      if (!on) {
+        clearLabelColor();
+      }
+      return;
+    }
+
+    if (on) {
+      // Rebuild ink and paper from the current body theme before play.
+      if (timeline.progress() === 0) {
+        timeline.invalidate();
+      }
+      timeline.play();
+      return;
+    }
+
+    timeline.reverse();
+  }
 
   useGSAP(
     () => {
@@ -221,8 +270,9 @@ function ContactLink() {
       }
 
       const fill = root.querySelector("[data-fill]");
+      const label = root.querySelector("[data-label]");
 
-      if (!fill) {
+      if (!fill || !label) {
         return;
       }
 
@@ -244,10 +294,27 @@ function ContactLink() {
         },
         0,
       );
+      // Fill uses the ink colour. The label must move to the page paper.
+      // immediateRender: false keeps the rest state on CSS inherit.
+      timeline.fromTo(
+        label,
+        {
+          color: () => getComputedStyle(document.body).color,
+        },
+        {
+          color: () => getComputedStyle(document.body).backgroundColor,
+          duration: 0.35,
+          ease: "power2.out",
+          immediateRender: false,
+        },
+        0,
+      );
+      timeline.eventCallback("onReverseComplete", clearLabelColor);
 
       timelineRef.current = timeline;
 
       return () => {
+        timeline.eventCallback("onReverseComplete", null);
         timelineRef.current = null;
       };
     },
@@ -318,7 +385,9 @@ function ContactLink() {
       onBlur={onBlur}
     >
       <span className={styles.fill} data-fill aria-hidden="true" />
-      <span className={styles.contactLabel}>03 Contact</span>
+      <span className={styles.contactLabel} data-label>
+        03 Contact
+      </span>
     </Link>
   );
 }

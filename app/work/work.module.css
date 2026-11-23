@@ -1,6 +1,6 @@
 .page {
   margin: 0;
-  padding: 1rem 1.25rem 40vh;
+  padding: 0 var(--page-inline) 40vh;
   color: inherit;
   background: transparent;
   font-family: var(--font-grotesque), system-ui, sans-serif;

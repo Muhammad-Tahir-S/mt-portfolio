@@ -1,4 +1,8 @@
 .body {
+  --shell-nav-height: 4.5rem;
+  --page-inline: 1.25rem;
+  --page-block-start: 2rem;
+  --page-block-end: 4rem;
   margin: 0;
   min-height: 100vh;
   background: #fff;
@@ -11,8 +15,10 @@
   left: 0;
   right: 0;
   z-index: 100;
+  /* Follows body. Theme boot and the route tween own that colour. */
+  background-color: inherit;
 }
 
 .content {
-  padding-top: 100px;
+  padding-top: calc(var(--shell-nav-height) + var(--page-block-start));
 }

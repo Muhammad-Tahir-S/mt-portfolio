@@ -3,7 +3,7 @@
   gap: 1.5rem;
   justify-items: start;
   margin: 0;
-  padding: 2rem 1.25rem 4rem;
+  padding: 0 var(--page-inline) var(--page-block-end);
   color: inherit;
   background: transparent;
   font-family: var(--font-grotesque), system-ui, sans-serif;
@@ -41,4 +41,14 @@
 .body {
   margin: 0;
   max-width: 65ch;
+}
+
+.mail {
+  color: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
 }

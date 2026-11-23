@@ -2,10 +2,8 @@
   display: grid;
   gap: 1.5rem;
   justify-items: start;
-  align-content: center;
   margin: 0;
-  min-height: calc(100vh - 100px);
-  padding: 2rem 1.25rem 4rem;
+  padding: 0 var(--page-inline) var(--page-block-end);
   color: inherit;
   background: transparent;
   font-family: var(--font-grotesque), system-ui, sans-serif;

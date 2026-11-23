@@ -1,12 +1,15 @@
 .nav {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 1.5rem;
   margin: 0;
   padding: 1rem 1.25rem;
-  font-family: system-ui, sans-serif;
-  font-size: 1rem;
+  font-family: var(--font-grotesque), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
   line-height: 1.2;
+  text-transform: uppercase;
 }
 
 .link {
@@ -30,15 +33,8 @@
   line-height: 1.4;
 }
 
-.clip [data-rest] {
-  font-style: normal;
-}
-
 .clip [data-hover] {
   transform: translateY(100%);
-  font-family: var(--font-floral), "Iowan Old Style", Palatino, serif;
-  font-style: italic;
-  font-weight: 300;
 }
 
 .line {
@@ -47,4 +43,35 @@
   background: currentColor;
   transform: scaleX(0);
   transform-origin: left center;
+}
+
+.contact {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 0.55rem 1rem;
+  border: 1px solid currentColor;
+  color: inherit;
+  text-decoration: none;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: currentColor;
+  transform: scale(0);
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.contactLabel {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  mix-blend-mode: difference;
+  line-height: 1.2;
 }

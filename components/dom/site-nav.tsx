@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type PointerEvent, type RefObject } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -13,6 +13,50 @@ const links = [
   { href: "/work", label: "02 Projects" },
 ] as const;
 
+type Pressed = {
+  pointer: boolean;
+  focus: boolean;
+  touch: boolean;
+};
+
+function usePressSync(timelineRef: RefObject<gsap.core.Timeline | null>) {
+  const pressed = useRef<Pressed>({
+    pointer: false,
+    focus: false,
+    touch: false,
+  });
+
+  function sync() {
+    const timeline = timelineRef.current;
+
+    if (!timeline) {
+      return;
+    }
+
+    const on =
+      pressed.current.pointer ||
+      pressed.current.focus ||
+      pressed.current.touch;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (reduce) {
+      timeline.progress(on ? 1 : 0);
+      return;
+    }
+
+    if (on) {
+      timeline.play();
+      return;
+    }
+
+    timeline.reverse();
+  }
+
+  return { pressed, sync };
+}
+
 type NavLinkProps = {
   href: string;
   label: string;
@@ -21,6 +65,7 @@ type NavLinkProps = {
 function NavLink({ href, label }: NavLinkProps) {
   const rootRef = useRef<HTMLAnchorElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const { pressed, sync } = usePressSync(timelineRef);
 
   useGSAP(
     () => {
@@ -37,10 +82,6 @@ function NavLink({ href, label }: NavLinkProps) {
       if (!rest || !hover || !line) {
         return;
       }
-
-      const reduceMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
 
       // The stylesheet parks the hover copy with translateY(100%).
       // GSAP reads that shift as a pixel y, then adds yPercent on top.
@@ -62,19 +103,19 @@ function NavLink({ href, label }: NavLinkProps) {
         {
           y: 0,
           yPercent: (index) => (index === 0 ? -100 : 0),
-          duration: reduceMotion ? 0 : 0.45,
+          duration: 0.45,
           ease: "power3.out",
-          stagger: reduceMotion ? 0 : 0.05,
+          stagger: 0.05,
         },
         "swap",
       );
-      timeline.addLabel("line", reduceMotion ? 0 : 0.08);
+      timeline.addLabel("line", 0.08);
       timeline.fromTo(
         line,
         { scaleX: 0 },
         {
           scaleX: 1,
-          duration: reduceMotion ? 0 : 0.4,
+          duration: 0.4,
           ease: "power2.inOut",
           transformOrigin: "left center",
         },
@@ -90,12 +131,54 @@ function NavLink({ href, label }: NavLinkProps) {
     { scope: rootRef },
   );
 
-  function show() {
-    timelineRef.current?.play();
+  function onPointerEnter(event: PointerEvent<HTMLAnchorElement>) {
+    if (event.pointerType === "touch") {
+      return;
+    }
+
+    pressed.current.pointer = true;
+    sync();
   }
 
-  function hide() {
-    timelineRef.current?.reverse();
+  function onPointerLeave(event: PointerEvent<HTMLAnchorElement>) {
+    if (event.pointerType === "touch") {
+      return;
+    }
+
+    pressed.current.pointer = false;
+    sync();
+  }
+
+  function onFocus() {
+    if (!rootRef.current?.matches(":focus-visible")) {
+      return;
+    }
+
+    pressed.current.focus = true;
+    sync();
+  }
+
+  function onBlur() {
+    pressed.current.focus = false;
+    sync();
+  }
+
+  function onPointerDown(event: PointerEvent<HTMLAnchorElement>) {
+    if (event.pointerType !== "touch") {
+      return;
+    }
+
+    pressed.current.touch = true;
+    sync();
+  }
+
+  function onPointerUp(event: PointerEvent<HTMLAnchorElement>) {
+    if (event.pointerType !== "touch") {
+      return;
+    }
+
+    pressed.current.touch = false;
+    sync();
   }
 
   return (
@@ -103,10 +186,13 @@ function NavLink({ href, label }: NavLinkProps) {
       ref={rootRef}
       href={href}
       className={styles.link}
-      onPointerEnter={show}
-      onPointerLeave={hide}
-      onFocus={show}
-      onBlur={hide}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
+      onPointerDown={onPointerDown}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      onFocus={onFocus}
+      onBlur={onBlur}
     >
       <span className={styles.stack}>
         <span className={styles.clip}>
@@ -121,12 +207,129 @@ function NavLink({ href, label }: NavLinkProps) {
   );
 }
 
+function ContactLink() {
+  const rootRef = useRef<HTMLAnchorElement>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const { pressed, sync } = usePressSync(timelineRef);
+
+  useGSAP(
+    () => {
+      const root = rootRef.current;
+
+      if (!root) {
+        return;
+      }
+
+      const fill = root.querySelector("[data-fill]");
+
+      if (!fill) {
+        return;
+      }
+
+      gsap.set(fill, { scale: 0, transformOrigin: "center" });
+
+      const timeline = gsap.timeline({
+        paused: true,
+        defaults: { overwrite: "auto" },
+      });
+
+      timeline.fromTo(
+        fill,
+        { scale: 0 },
+        {
+          scale: 1,
+          duration: 0.55,
+          ease: "expo.out",
+          transformOrigin: "center",
+        },
+        0,
+      );
+
+      timelineRef.current = timeline;
+
+      return () => {
+        timelineRef.current = null;
+      };
+    },
+    { scope: rootRef },
+  );
+
+  function onPointerEnter(event: PointerEvent<HTMLAnchorElement>) {
+    if (event.pointerType === "touch") {
+      return;
+    }
+
+    pressed.current.pointer = true;
+    sync();
+  }
+
+  function onPointerLeave(event: PointerEvent<HTMLAnchorElement>) {
+    if (event.pointerType === "touch") {
+      return;
+    }
+
+    pressed.current.pointer = false;
+    sync();
+  }
+
+  function onFocus() {
+    if (!rootRef.current?.matches(":focus-visible")) {
+      return;
+    }
+
+    pressed.current.focus = true;
+    sync();
+  }
+
+  function onBlur() {
+    pressed.current.focus = false;
+    sync();
+  }
+
+  function onPointerDown(event: PointerEvent<HTMLAnchorElement>) {
+    if (event.pointerType !== "touch") {
+      return;
+    }
+
+    pressed.current.touch = true;
+    sync();
+  }
+
+  function onPointerUp(event: PointerEvent<HTMLAnchorElement>) {
+    if (event.pointerType !== "touch") {
+      return;
+    }
+
+    pressed.current.touch = false;
+    sync();
+  }
+
+  return (
+    <Link
+      ref={rootRef}
+      href="/contact"
+      className={styles.contact}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
+      onPointerDown={onPointerDown}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      onFocus={onFocus}
+      onBlur={onBlur}
+    >
+      <span className={styles.fill} data-fill aria-hidden="true" />
+      <span className={styles.contactLabel}>03 Contact</span>
+    </Link>
+  );
+}
+
 export function SiteNav() {
   return (
     <nav className={styles.nav} aria-label="Primary">
       {links.map((link) => (
         <NavLink key={link.href} href={link.href} label={link.label} />
       ))}
+      <ContactLink />
     </nav>
   );
 }

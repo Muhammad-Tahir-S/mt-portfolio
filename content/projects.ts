@@ -225,6 +225,10 @@ export function themeBootScript() {
       background: paperTheme.background,
       color: themeInk(paperTheme),
     },
+    "/contact": {
+      background: paperTheme.background,
+      color: themeInk(paperTheme),
+    },
   };
 
   for (const project of projects) {

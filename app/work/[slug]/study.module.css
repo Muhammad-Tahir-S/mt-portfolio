@@ -70,6 +70,14 @@
   border: 1px solid currentColor;
 }
 
+.frame[data-study-model] {
+  background: var(--frame-fill, transparent);
+}
+
+:global(html.has-study-gl) .frame[data-study-model] {
+  background: transparent;
+}
+
 .caption {
   margin: 0.75rem 0 0;
   max-width: 65ch;

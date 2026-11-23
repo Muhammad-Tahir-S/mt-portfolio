@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import { TransitionLink } from "@/components/motion/transition-link";
 import { nextStudy, projects } from "@/content/projects";
+import { STUDY_MODEL_SLUG } from "@/lib/study-model";
 import { StudyTitle } from "./study-title";
 import styles from "./study.module.css";
 
@@ -49,7 +51,18 @@ export default async function StudyPage({
           ))}
         </ul>
         <figure className={styles.figure}>
-          <div className={styles.frame} aria-hidden="true" />
+          <div
+            className={styles.frame}
+            aria-hidden="true"
+            data-study-model={
+              project.slug === STUDY_MODEL_SLUG ? project.slug : undefined
+            }
+            style={
+              project.slug === STUDY_MODEL_SLUG
+                ? ({ "--frame-fill": project.theme.background } as CSSProperties)
+                : undefined
+            }
+          />
           <figcaption className={styles.caption}>{project.study.caption}</figcaption>
         </figure>
         {next?.slug ? (

@@ -42,7 +42,8 @@ export const projects: readonly ProjectSummary[] = [
       voice: "The overview had to stay still while the data moved.",
       body: "I shipped the audience builder, the campaign flow, and the marketing overview. The user radar came next, with wallets and charts on one screen.",
       services: ["Interface", "Data visualization", "Design system"],
-      caption: "Marketing overview. This frame waits for a still.",
+      caption:
+        "A study gem sits in this frame. The file is Meshopt and KTX2. It is not a still from the product.",
     },
   },
   {

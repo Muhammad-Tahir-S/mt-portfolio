@@ -11,10 +11,6 @@ import {
 import { rectToWorldOnPlane } from "@/lib/camera";
 import { createThemeTexture } from "@/lib/theme-texture";
 import {
-  offerModule7Sample,
-  readModule7Control,
-} from "@/lib/module-7-readout";
-import {
   createShadeTimeline,
   type ShadeState,
 } from "@/components/motion/gl-effects";
@@ -33,24 +29,11 @@ type BoundPlaneProps = {
 const WIDE_QUERY = "(min-width: 768px)";
 const REDUCE_QUERY = "(prefers-reduced-motion: reduce)";
 
-function peelReason(width: number, reduce: boolean) {
-  if (reduce) {
-    return "reduced" as const;
-  }
-
-  if (width >= 768) {
-    return "wide" as const;
-  }
-
-  return "narrow" as const;
-}
-
 /**
  * One plane locked to one DOM box through the live camera.
  * A GSAP timeline drives reveal, parallax, and peel.
  */
 export function BoundPlane({
-  slug,
   element,
   color,
   depth = 0,
@@ -58,7 +41,6 @@ export function BoundPlane({
   const meshRef = useRef<Mesh>(null);
   const placed = useRef(false);
   const played = useRef(false);
-  const seenReplay = useRef(0);
   const timelineRef = useRef<ReturnType<typeof createShadeTimeline> | null>(
     null,
   );
@@ -135,29 +117,9 @@ export function BoundPlane({
     };
     const reduce = window.matchMedia(REDUCE_QUERY).matches;
     const wide = window.matchMedia(WIDE_QUERY).matches;
-    const control = readModule7Control();
+    const inView = rect.top < viewport.height * 0.9 && rect.bottom > 40;
 
-    if (control.replay !== seenReplay.current) {
-      seenReplay.current = control.replay;
-
-      if (control.override === null && !reduce) {
-        active.pause(0);
-        active.play();
-        played.current = true;
-      }
-    }
-
-    if (control.override !== null) {
-      const value = Math.min(1, Math.max(0, control.override));
-      active.pause();
-      active.progress(value);
-      state.reveal = value;
-      state.innerX = 0;
-      state.innerY = -0.2 * (1 - value);
-      state.innerScale = 1 + 0.2 * (1 - value);
-      state.bendRequest = value;
-      played.current = true;
-    } else if (reduce) {
+    if (reduce) {
       active.pause();
       active.progress(1);
       state.reveal = 1;
@@ -165,6 +127,9 @@ export function BoundPlane({
       state.innerScale = 1;
       state.bendRequest = 0;
       played.current = true;
+    } else if (!played.current && inView) {
+      played.current = true;
+      active.play();
     }
 
     const allowPeel = wide && !reduce;
@@ -207,25 +172,6 @@ export function BoundPlane({
 
     const image = texture.image as { width?: number; height?: number };
     uniforms.u_imageSize.value.set(image.width ?? 1024, image.height ?? 1024);
-
-    const mid = rect.top + rect.height / 2;
-
-    offerModule7Sample({
-      ready: true,
-      slug,
-      progress: state.reveal,
-      innerY: state.innerY,
-      innerScale: state.innerScale,
-      bend: uniforms.u_enableBend.value,
-      reason: peelReason(viewport.width, reduce),
-      source: control.override === null ? "timeline" : "slider",
-      width: viewport.width,
-      meshW: plane.width,
-      meshH: plane.height,
-      imageW: image.width ?? 1024,
-      imageH: image.height ?? 1024,
-      distance: Math.abs(mid - viewport.height / 2),
-    });
   });
 
   return (

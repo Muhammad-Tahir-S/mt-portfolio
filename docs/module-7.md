@@ -1,5 +1,9 @@
 # Module 7
 
+The Module 7 readout was removed at the start of Module 8. The shaders remain on the index planes.
+
+
+
 Aim. You can predict the picture from one number, `u_progress`.
 This serves the site because the index stays one document. The shaders dress the planes. The HTML links stay the hit targets.
 

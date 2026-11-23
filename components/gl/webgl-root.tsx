@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import styles from "./webgl-root.module.css";
 import { IndexPlanes } from "./index-planes";
-import { Module7Frame } from "./module-7-frame";
 import { PageCamera } from "./page-camera";
+import { StudyModel } from "./study-model";
 import { Ticker } from "./ticker";
 
 /**
@@ -42,10 +42,10 @@ export function WebGLRoot() {
           fov: 50,
         }}
       >
-        <Module7Frame />
         <PageCamera />
         <Ticker />
         <IndexPlanes />
+        <StudyModel />
       </Canvas>
     </div>
   );

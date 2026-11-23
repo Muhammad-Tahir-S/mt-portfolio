@@ -10,6 +10,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { themeForPath } from "@/content/projects";
 import styles from "./site-nav.module.css";
 
 gsap.registerPlugin(useGSAP);
@@ -329,33 +330,22 @@ function ContactLink() {
   );
 
   useLayoutEffect(() => {
-    pressed.current = { pointer: false, focus: false, touch: false };
+    const on =
+      pressed.current.pointer ||
+      pressed.current.focus ||
+      pressed.current.touch;
 
-    const timeline = timelineRef.current;
-
-    if (timeline) {
-      timeline.pause();
-      timeline.progress(0);
-    }
-
-    clearLabelColor();
-
-    const root = rootRef.current;
-
-    if (!root) {
+    // Keep the fill where it is, like Index and Projects.
+    // Only refresh the label paper colour when the control is still on.
+    if (!on) {
+      clearLabelColor();
       return;
     }
 
-    // The shell stays mounted. A click can leave the pointer over Contact.
-    if (root.matches(":hover")) {
-      pressed.current.pointer = true;
-      sync();
-      return;
-    }
+    const label = rootRef.current?.querySelector("[data-label]");
 
-    if (root.matches(":focus-visible")) {
-      pressed.current.focus = true;
-      sync();
+    if (label) {
+      gsap.set(label, { color: themeForPath(pathname).background });
     }
   }, [pathname]);
 

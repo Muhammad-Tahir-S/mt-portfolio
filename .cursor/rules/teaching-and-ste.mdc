@@ -58,3 +58,11 @@ On this site, Highway fetches the next HTML page. It replaces one node. The WebG
 ```
 
 Read `docs/craft-reference.md` before you change layout, motion, routing, or WebGL.
+
+## Module close
+
+Follow "How a module closes" in `docs/craft-reference.md`.
+
+- Add one lower-left readout for values that do not change the picture.
+- Write the DevTools check in `docs/module-N.md`.
+- Delete the previous module readout when the next module starts. Do not keep two readouts.

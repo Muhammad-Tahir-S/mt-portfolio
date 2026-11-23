@@ -704,6 +704,22 @@ This course is for a front-end developer with about five years in React and Type
 
 A module is done when the check passes at a phone width and at 1440px, with the keyboard only.
 
+### How a module closes
+
+Aim. You can see a change that does not change the picture.
+This serves the site because the HTML document stays the page. The readout is a study aid. It is not the design.
+
+Some work has no new shape. A camera value, a damp value, and a scroll fraction are examples.
+
+Close each module with two checks:
+
+- Add one readout for this module. Pin it to the lower left. Show the values that scroll or state can change. Set `pointer-events` to `none`.
+- Write the DevTools check in `docs/module-N.md`. Name the panel, the Console object, and the Elements node. Say what you should see when you scroll, resize, or change route.
+
+Start the next module by deleting the previous readout. Delete the component, the style, and the store. Do not keep two readouts.
+
+The current readout is Module 6. It is `components/dev/module-6-check.tsx`. Delete it when Module 7 starts.
+
 The time budget is 5 to 10 hours each week. Modules 0 to 11 take about 14 to 18 weeks. Modules 12 to 14 are the stretch that makes the work studio-grade.
 
 Module 0 is orientation. It does not design the final look. Visual direction waits until the exercises hold.

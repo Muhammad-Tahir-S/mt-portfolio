@@ -1,3 +1,13 @@
+.shell {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  /* Follows body. Theme boot and the route tween own that colour. */
+  background-color: inherit;
+}
+
 .nav {
   display: flex;
   flex-wrap: wrap;

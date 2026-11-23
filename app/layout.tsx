@@ -45,9 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: themeBootScript() }} />
         <ScrollRoot />
         <RouteTransition />
-        <div className={styles.nav}>
-          <SiteNav />
-        </div>
+        <SiteNav />
         <div className={styles.content}>{children}</div>
       </body>
     </html>

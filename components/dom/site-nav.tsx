@@ -1,7 +1,13 @@
 "use client";
 
-import { useRef, type PointerEvent, type RefObject } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  type PointerEvent,
+  type RefObject,
+} from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import styles from "./site-nav.module.css";
@@ -210,6 +216,7 @@ function NavLink({ href, label }: NavLinkProps) {
 function ContactLink() {
   const rootRef = useRef<HTMLAnchorElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const pathname = usePathname();
   const pressed = useRef<Pressed>({
     pointer: false,
     focus: false,
@@ -321,6 +328,37 @@ function ContactLink() {
     { scope: rootRef },
   );
 
+  useLayoutEffect(() => {
+    pressed.current = { pointer: false, focus: false, touch: false };
+
+    const timeline = timelineRef.current;
+
+    if (timeline) {
+      timeline.pause();
+      timeline.progress(0);
+    }
+
+    clearLabelColor();
+
+    const root = rootRef.current;
+
+    if (!root) {
+      return;
+    }
+
+    // The shell stays mounted. A click can leave the pointer over Contact.
+    if (root.matches(":hover")) {
+      pressed.current.pointer = true;
+      sync();
+      return;
+    }
+
+    if (root.matches(":focus-visible")) {
+      pressed.current.focus = true;
+      sync();
+    }
+  }, [pathname]);
+
   function onPointerEnter(event: PointerEvent<HTMLAnchorElement>) {
     if (event.pointerType === "touch") {
       return;
@@ -393,12 +431,40 @@ function ContactLink() {
 }
 
 export function SiteNav() {
+  const shellRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const shell = shellRef.current;
+
+    if (!shell) {
+      return;
+    }
+
+    const writeHeight = () => {
+      document.body.style.setProperty(
+        "--shell-nav-height",
+        `${shell.getBoundingClientRect().height}px`,
+      );
+    };
+
+    writeHeight();
+
+    const observer = new ResizeObserver(writeHeight);
+    observer.observe(shell);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <nav className={styles.nav} aria-label="Primary">
-      {links.map((link) => (
-        <NavLink key={link.href} href={link.href} label={link.label} />
-      ))}
-      <ContactLink />
-    </nav>
+    <div ref={shellRef} className={styles.shell}>
+      <nav className={styles.nav} aria-label="Primary">
+        {links.map((link) => (
+          <NavLink key={link.href} href={link.href} label={link.label} />
+        ))}
+        <ContactLink />
+      </nav>
+    </div>
   );
 }
